@@ -1,5 +1,6 @@
 from osm2networkx import *
 import random
+import math
 
 """
 Searching a street network using Breadth First Search
@@ -29,9 +30,10 @@ The state space in our problem hold:
 """
 class State:
 
-    def __init__(self, node, parent):
+    def __init__(self, node, parent, cost = 0):
         self.node   = node
         self.parent = parent
+        self.cost = cost
 
     def __eq__(self, other):
         if isinstance(other, State):
@@ -84,3 +86,22 @@ def backtrack(state, graph):
                 for key in graph.node[edge[1]]['data'].tags:
                     print "       E: ", graph.node[edge[1]]['data'].tags[key]
         backtrack(state.parent, graph)
+
+# Haversine formula example in Python
+# Author: Wayne Dyck
+# Modified: Ruffin White
+
+def distance(node, child):
+    
+    lat1, lon1 = [node.node['data'].lat, node.node['data'].lon]
+    lat2, lon2 = [child.node['data'].lat, child.node['data'].lon]
+    radius = 6371 # km
+
+    dlat = math.radians(lat2-lat1)
+    dlon = math.radians(lon2-lon1)
+    a = math.sin(dlat/2) * math.sin(dlat/2) + math.cos(math.radians(lat1)) \
+        * math.cos(math.radians(lat2)) * math.sin(dlon/2) * math.sin(dlon/2)
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
+    d = radius * c
+
+    return d
