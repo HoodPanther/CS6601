@@ -76,21 +76,21 @@ def bfs(graph, start, goal):
     num_explored = 0
     while len(frontier) > 0:
        node = frontier.pop(0)
-
        explored.append(node)
+       
        for edge in networkx.edges(graph, node.node['data'].id):
            child = State(graph.node[edge[1]], node, node.cost)
-           child.cost += distance(node, child)
            if (child not in explored) and (child not in frontier):
-               # HINT: Goal - Check
-               if child == goal:
-                   print "Goal found"
-                   print "  Explored: ", num_explored
-                   print "      Cost: ", child.cost, "\n\n"
-                   return child
-               else:
-                   frontier.append(child)
-               num_explored = num_explored + 1
+                child.cost += distance(node, child)
+                # HINT: Goal - Check
+                if child == goal:
+                    print "Goal found"
+                    print "  Explored: ", num_explored
+                    print "      Cost: ", child.cost, "\n\n"
+                    return child
+                else:
+                    frontier.append(child)
+                num_explored = num_explored + 1
     print "No path found, explored: ", num_explored
 
     return None
