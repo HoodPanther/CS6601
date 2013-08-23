@@ -28,6 +28,27 @@ The state space in our problem hold:
    2) A parent node
 
 """
+
+# Haversine formula example in Python
+# Author: Wayne Dyck
+# Modified: Ruffin White
+
+def distance(node, child):
+    
+    lat1, lon1 = [node.node['data'].lat, node.node['data'].lon]
+    lat2, lon2 = [child.node['data'].lat, child.node['data'].lon]
+    radius = 6371 # km
+
+    dlat = math.radians(lat2-lat1)
+    dlon = math.radians(lon2-lon1)
+    a = math.sin(dlat/2) * math.sin(dlat/2) + math.cos(math.radians(lat1)) \
+        * math.cos(math.radians(lat2)) * math.sin(dlon/2) * math.sin(dlon/2)
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
+    d = radius * c
+
+    return d
+
+
 class State:
 
     def __init__(self, node, parent, cost = 0):
@@ -58,11 +79,14 @@ def bfs(graph, start, goal):
 
        explored.append(node)
        for edge in networkx.edges(graph, node.node['data'].id):
-           child = State(graph.node[edge[1]], node) 
+           child = State(graph.node[edge[1]], node, node.cost)
+           child.cost += distance(node, child)
            if (child not in explored) and (child not in frontier):
                # HINT: Goal - Check
                if child == goal:
-                   print "Goal found, explored: ", num_explored, "\n\n"
+                   print "Goal found"
+                   print "  Explored: ", num_explored
+                   print "      Cost: ", child.cost, "\n\n"
                    return child
                else:
                    frontier.append(child)
@@ -86,22 +110,3 @@ def backtrack(state, graph):
                 for key in graph.node[edge[1]]['data'].tags:
                     print "       E: ", graph.node[edge[1]]['data'].tags[key]
         backtrack(state.parent, graph)
-
-# Haversine formula example in Python
-# Author: Wayne Dyck
-# Modified: Ruffin White
-
-def distance(node, child):
-    
-    lat1, lon1 = [node.node['data'].lat, node.node['data'].lon]
-    lat2, lon2 = [child.node['data'].lat, child.node['data'].lon]
-    radius = 6371 # km
-
-    dlat = math.radians(lat2-lat1)
-    dlon = math.radians(lon2-lon1)
-    a = math.sin(dlat/2) * math.sin(dlat/2) + math.cos(math.radians(lat1)) \
-        * math.cos(math.radians(lat2)) * math.sin(dlon/2) * math.sin(dlon/2)
-    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
-    d = radius * c
-
-    return d
