@@ -84,28 +84,3 @@ def backtrack(state, graph):
                 for key in graph.node[edge[1]]['data'].tags:
                     print "       E: ", graph.node[edge[1]]['data'].tags[key]
         backtrack(state.parent, graph)
-
-
-"""
-The setup
-"""
-
-print "\n\n----- 6601 Grad AI: Seaching ATLANTA ------\n\n"
-only_roads = True
-graph = read_osm('atlanta.osm', only_roads)
-
-start_num = random.randint(0, len(graph.nodes()))
-stop_num = random.randint(0, len(graph.nodes()))
-
-start     = graph.node[graph.nodes()[start_num]]
-stop      = graph.node[graph.nodes()[stop_num]]
-print "NUMBER OF NODES: ", len(graph.nodes())
-print "NUMBER OF EDGES: ", len(graph.edges())
-print "START:           ", start['data'].id
-print "STOP :           ", stop['data'].id
-
-state = bfs(graph, State(start, None), State(stop, None))
-if state != None:
-    backtrack(state, graph)
-
-print "\n\n"
