@@ -61,6 +61,9 @@ class State:
         if isinstance(other, State):
             return self.node['data'].id == other.node['data'].id
         return NotImplemented
+        
+    def __hash__(self):
+        return hash(self.node['data'].id)
 
 """
 Implements BFS on our GPS data
