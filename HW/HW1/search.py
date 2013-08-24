@@ -51,10 +51,11 @@ def distance(node, child):
 
 class State:
 
-    def __init__(self, node, parent, cost = 0):
+    def __init__(self, node, parent, cost = 0, seeds = []):
         self.node   = node
         self.parent = parent
         self.cost = cost
+        self.seed = seeds
 
     def __eq__(self, other):
         if isinstance(other, State):
