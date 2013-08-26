@@ -48,6 +48,15 @@ def distance(node, child):
 
     return d
 
+#def distance(node, child):
+#    
+#    lat1, lon1 = [node.node['data'].lat, node.node['data'].lon]
+#    lat2, lon2 = [child.node['data'].lat, child.node['data'].lon]
+#    
+#    d = math.sqrt( (lat2-lat1)*(lat2-lat1) + (lon2-lon1)*(lon2-lon1) )
+#
+#    return d
+
 
 class State:
 
