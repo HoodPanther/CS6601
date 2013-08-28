@@ -60,7 +60,7 @@ def distance(node, child):
 
 class State:
 
-    def __init__(self, node, parent, cost = 0, seeds = []):
+    def __init__(self, node, parent, cost = 0, seeds = None):
         self.node   = node
         self.parent = parent
         self.cost = cost
@@ -73,6 +73,23 @@ class State:
         
     def __hash__(self):
         return hash(self.node['data'].id)
+        
+class Path:
+
+    def __init__(self, start, stop, cost):
+        self.start  = start
+        self.stop   = stop
+        self.cost   = cost
+
+    def __eq__(self, other):
+        if isinstance(other, Path):
+            same = (self.start == other.start) and (self.stop == other.stop)
+            swap = (self.start == other.stop) and (self.stop == other.start)
+            return same or swap
+        return NotImplemented
+        
+    def __hash__(self):
+        return hash(self.start.node['data'].id) ^ hash(self.stop.node['data'].id)
 
 """
 Implements BFS on our GPS data
