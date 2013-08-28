@@ -76,21 +76,32 @@ class State:
         
 class Path:
 
-    def __init__(self, start, stop, cost):
+    def __init__(self, start, stop, cost, joint = False):
         self.start  = start
         self.stop   = stop
         self.cost   = cost
+        self.joint   = joint
 
     def __eq__(self, other):
         if isinstance(other, Path):
-            same = (self.start == other.start) and (self.stop == other.stop)
-            swap = (self.start == other.stop) and (self.stop == other.start)
+            if(self.joint):
+                same = (self.start.seed == other.start.seed) and (self.stop.seed == other.stop.seed)
+                swap = (self.start.seed == other.stop.seed) and (self.stop.seed == other.start.seed)
+            else:
+                same = (self.start == other.start) and (self.stop == other.stop)
+                swap = (self.start == other.stop) and (self.stop == other.start)
             return same or swap
         return NotImplemented
         
     def __hash__(self):
         return hash(self.start.node['data'].id) ^ hash(self.stop.node['data'].id)
-
+    
+    def __str__(self):
+            if(self.joint):
+                return str(self.start.seed.node['data'].id + " -> " + self.stop.seed.node['data'].id)
+            else:
+                return str(self.start.node['data'].id + " -> " + self.stop.node['data'].id)
+    
 """
 Implements BFS on our GPS data
 
